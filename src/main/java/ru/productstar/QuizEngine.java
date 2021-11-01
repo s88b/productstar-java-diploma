@@ -8,6 +8,7 @@ import java.util.List;
 
 public class QuizEngine {
     public static final String QUIT_INPUT = "q";
+
     private final FileReader fileReader;
     private final DataParser dataParser;
     private final AnswerChecker answerChecker;
@@ -25,12 +26,30 @@ public class QuizEngine {
     public void run() throws IOException, URISyntaxException {
         questions = loadQuestions();
         terminal.printIntroduction();
-
         startQuiz();
     }
 
     void startQuiz() {
+        for (Question question : questions) {
+            terminal.printQuestion(question);
 
+            while(true) {
+                String input = terminal.readLine();
+
+                if (input.equals(QUIT_INPUT)) {
+                    return;
+                }
+
+                if (answerChecker.isUserAnswerCorrect(input, question)) {
+                    terminal.congratulateUserWithCorrectAnswer();
+                    break;
+                } else {
+                    terminal.printRetry();
+                }
+            }
+        }
+
+        terminal.congratulateUserWithQuizFinish();
     }
 
     List<Question> loadQuestions() throws IOException, URISyntaxException {

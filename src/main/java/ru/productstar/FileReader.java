@@ -1,25 +1,23 @@
 package ru.productstar;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FileReader {
-    private String file;
+    private final String fileName;
 
-    public FileReader(String file) {
-        this.file = file;
+    public FileReader(String fileName) {
+        this.fileName = fileName;
     }
 
-    public List<String> readFile() throws IOException, URISyntaxException {
-        URL resource = getClass().getClassLoader().getResource(file);
-        Path path = new File(resource.toURI()).toPath();
-        return Files.readAllLines(path, StandardCharsets.UTF_8);
-
+    public List<String> readFile() {
+        InputStream in = FileReader.class.getClassLoader().getResourceAsStream(fileName);
+        if (in != null) {
+            return new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 }

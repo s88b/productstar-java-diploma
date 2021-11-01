@@ -1,6 +1,7 @@
 package ru.productstar.dto;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Question {
     private QuestionType questionType;
@@ -40,8 +41,8 @@ public class Question {
 
         if (questionType != question.questionType) return false;
         if (!text.equals(question.text)) return false;
-        if (!correctAnswer.equals(question.correctAnswer)) return false;
-        return answerOptions.equals(question.answerOptions);
+        if (!Objects.equals(answerOptions, question.answerOptions)) return false;
+        return correctAnswer.equalsIgnoreCase(question.correctAnswer);
     }
 
     @Override
